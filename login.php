@@ -47,7 +47,7 @@
 			
                 $hash = hash("sha512", $password);
                 
-                loginUser($email, $hash);
+                $User->loginUser($email, $hash);
             
             }
 		} // login if end
@@ -82,7 +82,7 @@
                 $hash = hash("sha512", $create_password);
                 
                 //functions.php's funktsioon
-                createUser($create_email, $hash);
+                $response=$User->createUser($create_email, $hash);
                 
                 
             }
@@ -113,6 +113,14 @@
   </form>
 
   <h2>Create user</h2>
+  <?php if(isset($response->success)): ?>
+	<p style="color:green;"><?=$response->success->message?></p>
+  
+  <?php elseif(isset($response->error)): ?>
+	<p style="color:red;"><?=$response->error->message?></p>
+  
+  <?php endif; ?>
+  
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="create_email" type="email" placeholder="E-post" value="<?php echo $create_email; ?>"> <?php echo $create_email_error; ?><br><br>
   	<input name="create_password" type="password" placeholder="Parool"> <?php echo $create_password_error; ?> <br><br>
