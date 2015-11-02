@@ -5,6 +5,7 @@
     //kontrollin kas sessiooni muutuja olemas
     if(isset($_SESSION['user_id'])){
         header("Location: data.php");
+		exit();
     }
 	
 	
@@ -57,7 +58,10 @@
 					$_SESSION["user_id"] = $login_response->success->user->id;
 					$_SESSION["user_email"] = $login_response->success->user->email;
 					
+					$_SESSION["login_message"] = $login_response->success->message;
+					
 					header("Location: data.php");
+					exit();
 					
 				}
 				
@@ -118,6 +122,14 @@
 <body>
 
   <h2>Log in</h2>
+
+  <?php if(isset($login_response->error)): ?>
+	<p style="color:red;">
+	<?=$login_response->error->message;?>
+	</p>
+  
+  <?php endif; ?>
+  
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
   	<input name="email" type="email" placeholder="E-post" value="<?php echo $email; ?>"> <?php echo $email_error; ?><br><br>
   	<input name="password" type="password" placeholder="Parool" value="<?php echo $password; ?>"> <?php echo $password_error; ?><br><br>
@@ -126,10 +138,14 @@
 
   <h2>Create user</h2>
   <?php if(isset($response->success)): ?>
-	<p style="color:green;"><?=$response->success->message?></p>
+	<p style="color:green;">
+	<?=$response->success->message;?>
+	</p>
   
   <?php elseif(isset($response->error)): ?>
-	<p style="color:red;"><?=$response->error->message?></p>
+	<p style="color:red;">
+	<?=$response->error->message;?>
+	</p>
   
   <?php endif; ?>
   
