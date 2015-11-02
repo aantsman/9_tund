@@ -3,7 +3,7 @@
     
     //kui kasutaja on sisse logitud, suuna teisele lehele
     //kontrollin kas sessiooni muutuja olemas
-    if(isset($_SESSION['logged_in_user_id'])){
+    if(isset($_SESSION['user_id'])){
         header("Location: data.php");
     }
 	
@@ -49,8 +49,18 @@
                 
                 $login_response=$User->loginUser($email, $hash);
 				
-				var_dump($login_response);
-            
+				//var_dump($login_response);
+				//echo $login_response->success->user->email;
+				
+				if(isset($login_response->success)){
+					//sisselogimine õnnestus
+					$_SESSION["user_id"] = $login_response->success->user->id;
+					$_SESSION["user_email"] = $login_response->success->user->email;
+					
+					header("Location: data.php");
+					
+				}
+				
             }
 		} // login if end
 		
