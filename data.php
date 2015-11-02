@@ -128,19 +128,22 @@ endif; ?>
 
 <?php endif; ?>
 
+<h3> Galerii </h3>
 <?php
-	
 	//saada kätte kõik mis on kaustas
 	$images = scandir("profile_pics/");
+	//var_dump($images);
 	
-	var_dump($images);
 	
 	//iga pildi kohta tekitame lingi
 	for($i = 0; $i < count($images); $i++){
+		
+		//pilt ei ole . ega ..
+		if ($name = $images[$i]!='.' && $name = $images[$i] != '..'){
+			$link = "profile_pics/".$images[$i];
+			$name = $images[$i];
 	
-		$link = "profile_pics/".$images[$i];
-		$name = $images[$i];
-	
-		echo '<a href="'.$link.'">'.$name.'</a><br>';
+			echo '<a href="'.$link.'">'.$name.'</a><br>';
+		}
 	}
 ?>
