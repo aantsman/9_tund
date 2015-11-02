@@ -47,7 +47,9 @@
 			
                 $hash = hash("sha512", $password);
                 
-                $User->loginUser($email, $hash);
+                $login_response=$User->loginUser($email, $hash);
+				
+				var_dump($login_response);
             
             }
 		} // login if end

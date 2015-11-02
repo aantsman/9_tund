@@ -14,25 +14,34 @@ class User {
 	}
 	
 	function logInUser($email, $hash){
+		
+		$response=new StdClass();
         
         $stmt = $this->connection->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
         $stmt->bind_param("ss", $email, $hash);
         $stmt->bind_result($id_from_db, $email_from_db);
         $stmt->execute();
         if($stmt->fetch()){
-            echo "Kasutaja logis sisse id=".$id_from_db;
-            
-            // sessioon, salvestatakse serveris
-            $_SESSION['logged_in_user_id'] = $id_from_db;
-            $_SESSION['logged_in_user_email'] = $email_from_db;
-            
-            //suuname kasutaja teisele lehel
-            header("Location: data.php");
-            
+			
+			//selline kasutaja on olemas
+			$success=new StdClass();
+			$success->message="Sai edukalt sisse logitud";
+			
+			$user= new StdClass();
+			$user->id=$id_from_db;
+			$user->email=$email_from_db;
+			
+			$success->user = $user;
+			
+			$response->success=$success;
+			
         }else{
+			//ei olnud sellist kasutajat
             echo "Wrong credentials!";
         }
         $stmt->close();
+		
+		return $response;
         
     }
     
